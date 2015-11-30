@@ -27,13 +27,14 @@ func main() {
 		go func(c net.Conn) {
 			// Echo all incoming data.
 			b := make([]byte, 500)
+
 			c.Read(b)
 			err := ioutil.WriteFile("./test.txt", b, 0644)
 
 			fmt.Println("Fichier créé")
 			check(err)
 			//io.Copy(c, c)
-			fmt.Println(c)
+			//fmt.Println(c)
 			// Shut down the connection.
 			c.Close()
 		}(conn)

@@ -1,0 +1,5 @@
+TODO :
+
+- Décider d'un protocole d'échange lors de l'envoie des paquets du fichier en boucle.
+- Se documenter sur une checksum pour identifier les dernières MàJ des différents dossiers/fichiers.
+- Le serveur et les clients doivent avoir en ram l'arborescence du dossier racine avec les checksums indiquant les dernières MàJ (NB : il faut aussi le sauvegarder/recharger en cas de redémarrage du programme).
