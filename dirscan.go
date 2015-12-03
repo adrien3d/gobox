@@ -4,7 +4,6 @@ import (
     "fmt"
     "io/ioutil"
     "os"
-    //"strings"
     "time"
     "strconv"
 )
@@ -24,15 +23,17 @@ type fol struct {
 }
 
 func (myFile fic) fileToString() string {
-  var toPrint string = "\n"+myFile.nom +"\t\t"+ strconv.FormatInt(myFile.lon, 10) +"\t\t"+ myFile.tim.Format("02/01/2006 15:04:05")
+  var toPrint string = "\n\t"+myFile.nom +"\t"+ strconv.FormatInt(myFile.lon, 10) +"\t\t"+ myFile.tim.Format("02/01/2006 15:04:05")
   return toPrint;
 }
 
 func (myFolder fol) folderToString() string {
   var toPrint string = "\n"+myFolder.nom +"\t\t"+ strconv.FormatInt(myFolder.lon, 10) +"\t\t"+ myFolder.tim.Format("02/01/2006 15:04:05")
-
-  for _,f := range myFolder.subFol {
-    toPrint += f.folderToString()
+ for _,fi := range myFolder.files {
+      toPrint += fi.fileToString()
+    }
+  for _,fo := range myFolder.subFol {
+    toPrint += fo.folderToString()
   }
 
   return toPrint;
@@ -41,6 +42,7 @@ func (myFolder fol) folderToString() string {
 func scanDir(folder string) (fol, error) {
 	var listeRep fol
 	listeRep.nom = folder
+
 	files, err := ioutil.ReadDir(folder)
 	if err != nil {
 		return listeRep, err
@@ -55,10 +57,13 @@ func scanDir(folder string) (fol, error) {
 		}
 		stat, err := fi.Stat()
 		if err != nil {
-
 			return listeRep, err
 		}
 		var curSiz int64 = stat.Size()
+    lastModifTime := stat.ModTime()
+
+    listeRep.lon = curSiz
+    listeRep.tim = lastModifTime
 
 		if stat.IsDir() {
 			var newPath string = folder + curNam + "/"
@@ -70,7 +75,7 @@ func scanDir(folder string) (fol, error) {
 			listeRep.subFol = append(listeRep.subFol, fol)
 
 		} else {
-			fil := fic{nom: curNam, lon: curSiz}
+			fil := fic{nom: curNam, lon: curSiz, tim: lastModifTime}
 			listeRep.files = append(listeRep.files, fil)
 		}
 	}
@@ -79,13 +84,19 @@ func scanDir(folder string) (fol, error) {
 
 func check(err error) {
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Fatal error : %s", err.Error())
+		fmt.Fprintf(os.Stderr, "Erreur fatale : %s", err.Error())
 		os.Exit(1)
 	}
 }
 
 func main() {
-	listRep, err := scanDir("./files/")
-	check(err)
+  var dir string
+  if (len(os.Args)>1) {
+    dir = os.Args[1]
+  } else {
+    dir = "./files/"
+  }
+  listRep, err := scanDir(dir)
+  check(err)
 	fmt.Println(listRep.folderToString())
 }
