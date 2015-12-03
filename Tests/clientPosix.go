@@ -50,11 +50,23 @@ func main() {
 	dat, err := splitFile("./test.txt")
 	check(err)
 
-	//n, err = s.Write(sd, dat[0])
-	err = s.Sendto(sd, dat[0], 0, &sa)
+	if runtime.GOOS == "windows" {
+		data := dat[0]
+		buf := &s.WSABuf{
+			Len: uint32(len(data)),
+			Buf: &data[0],
+		}
+		var sent *uint32
+		overlapped := s.Overlapped{}
+		croutine := byte(0)
+
+		err = s.WSASendto(sd, buf, 1, sent, uint32(0), &sa, &overlapped, &croutine)
+	} else {
+		n, err = s.Write(sd, dat[0])
+	}
 	check(err)
-	fmt.Println(dat)
-	fmt.Println("PLOP")
+
+	fmt.Println("FIN")
 }
 
 // Cette fonction découpe un fichier en tableau de buffer
