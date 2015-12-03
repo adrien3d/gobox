@@ -1,20 +1,41 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-	"os"
+    "fmt"
+    "io/ioutil"
+    "os"
+    //"strings"
+    "time"
+    "strconv"
 )
 
 type fic struct {
-	nom string
-	lon int64
+  nom string 
+  lon int64
+  tim time.Time
+}
+ 
+type fol struct {
+  subFol []fol
+  files  []fic
+  nom string
+  lon int64
+  tim time.Time
 }
 
-type fol struct {
-	subFol []fol
-	files  []fic
-	nom    string
+func (myFile fic) fileToString() string {
+  var toPrint string = "\n"+myFile.nom +"\t\t"+ strconv.FormatInt(myFile.lon, 10) +"\t\t"+ myFile.tim.Format("02/01/2006 15:04:05")
+  return toPrint;
+}
+
+func (myFolder fol) folderToString() string {
+  var toPrint string = "\n"+myFolder.nom +"\t\t"+ strconv.FormatInt(myFolder.lon, 10) +"\t\t"+ myFolder.tim.Format("02/01/2006 15:04:05")
+
+  for _,f := range myFolder.subFol {
+    toPrint += f.folderToString()
+  }
+
+  return toPrint;
 }
 
 func scanDir(folder string) (fol, error) {
@@ -66,5 +87,5 @@ func check(err error) {
 func main() {
 	listRep, err := scanDir("./files/")
 	check(err)
-	fmt.Println(listRep)
+	fmt.Println(listRep.folderToString())
 }

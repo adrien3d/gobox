@@ -1,0 +1,8 @@
+1ère version :
+Un seul client synchronise un dossier sur le serveur. Le dossier est synchronisé dès le lancement du client.
+
+2ème version :
+Cette fois ci le serveur gère la synchronisation entre 2 clients, une modification sur un client entraînera une mise à jour de l’autre client via le serveur. La gestion de conflit sera sommaire dans cette version.
+
+3ème version :
+Synchronisation d’un dossier entre N clients avec gestion des priorités temporelles.
