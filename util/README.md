@@ -1,33 +1,43 @@
-PACKAGE DOCUMENTATION
+# util
+--
+    import "github.com/adrien3d/gobox/util"
 
-package util
-    import "./util/"
++build !windows
 
-    +build windows
++build windows
 
-CONSTANTS
+## Usage
 
+```go
 const (
-    MAXSIZE = 500
-    PORT    = 3000
+	MAXSIZE = 500
+	PORT    = 3000
 )
+```
 
-VARIABLES
-
+```go
 var (
-    ADDR = [4]byte{10, 8, 0, 1}
+	ADDR = [4]byte{10, 8, 0, 1}
 )
+```
 
-FUNCTIONS
+#### func  Dial
 
+```go
 func Dial() (s.Handle, s.SockaddrInet4, error)
-    Etablie une connexion via socket sur le serveur à l'aide des librairies
-    POSIX ou WSA.
+```
+Etablie une connexion via socket sur le serveur à l'aide des librairies POSIX ou
+WSA.
 
+#### func  SplitFile
+
+```go
 func SplitFile(path string) (packets [][]byte, err error)
-    Cette fonction découpe un fichier en tableau de buffer de taille
-    MAXSIZE.
+```
+Cette fonction découpe un fichier en tableau de buffer de taille MAXSIZE.
 
+#### func  Write
+
+```go
 func Write(sd s.Handle, sa s.SockaddrInet4, b []byte) error
-
-
+```
