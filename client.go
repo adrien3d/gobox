@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"gobox/util"
+	"github.com/adrien3d/gobox/util"
 	"os"
 	s "syscall"
 )
@@ -13,9 +13,9 @@ func main() {
 	check(err)
 	defer s.Close(sd)
 
-	dat, err := util.SplitFile("./test.txt")
+	dat, err := util.SplitFile("./Tests/test.txt")
 	check(err)
-	err = util.Write(sd, sa, b)
+	err = util.Write(sd, sa, dat[0])
 	check(err)
 
 	fmt.Println("FIN")
