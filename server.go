@@ -2,33 +2,64 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"log"
-	"net"
+	"gobox/server"
+	"io/ioutil"
+	"os"
+	s "syscall"
+)
+
+const (
+	PORT = 3000
 )
 
 func main() {
-	// Listen on TCP port 2000 on all interfaces.
-	l, err := net.Listen("tcp", ":527")
+	var sa s.SockaddrInet4
+	fmt.Println(sa)
+	fd, err := s.Socket(s.AF_INET, s.SOCK_STREAM, 0)
 	if err != nil {
-		log.Fatal(err)
+		check(err)
 	}
-	defer l.Close()
+	defer s.Close(fd)
+	if err := s.Bind(fd, &s.SockaddrInet4{Port: PORT, Addr: [4]byte{0, 0, 0, 0}}); err != nil {
+		check(err)
+	}
+
+	if err := s.Listen(fd, 5); err != nil {
+		check(err)
+	}
+
 	for {
-		// Wait for a connection.
-		conn, err := l.Accept()
+		nfd, sa, err := s.Accept(fd)
 		if err != nil {
-			log.Fatal(err)
+			check(err)
 		}
-		// Handle the connection in a new goroutine.
-		// The loop then returns to accepting, so that
-		// multiple connections may be served concurrently.
-		go func(c net.Conn) {
-			// Echo all incoming data.
-			io.Copy(c, c)
-			// Shut down the connection.
-			fmt.Println("Request")
-			c.Close()
-		}(conn)
+
+		go func(nfd int, sa s.Sockaddr) {
+			fmt.Println(sa)
+			defer s.Close(nfd)
+			b := make([]byte, 500)
+			var n int
+			for {
+				n, err = s.Read(nfd, b)
+				if n != 0 {
+					break
+				}
+
+			}
+			fmt.Println(n)
+			err := ioutil.WriteFile("./test.txt", b, 0644)
+
+			fmt.Println("Fichier créé")
+			check(err)
+
+		}(nfd, sa)
+	}
+}
+
+// Fonction pour checker les erreurs
+func check(err error) {
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
+		os.Exit(1)
 	}
 }

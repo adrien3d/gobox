@@ -2,33 +2,29 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"log"
-	"net"
+	"gobox/util"
+	"os"
+	s "syscall"
 )
 
 func main() {
-	// Listen on TCP port 2000 on all interfaces.
-	l, err := net.Listen("tcp", ":527")
+	//var n int
+	sd, sa, err := util.Dial()
+	check(err)
+	defer s.Close(sd)
+
+	dat, err := util.SplitFile("./test.txt")
+	check(err)
+	err = util.Write(sd, sa, b)
+	check(err)
+
+	fmt.Println("FIN")
+}
+
+// Fonction pour checker les erreurs
+func check(err error) {
 	if err != nil {
-		log.Fatal(err)
-	}
-	defer l.Close()
-	for {
-		// Wait for a connection.
-		conn, err := l.Accept()
-		if err != nil {
-			log.Fatal(err)
-		}
-		// Handle the connection in a new goroutine.
-		// The loop then returns to accepting, so that
-		// multiple connections may be served concurrently.
-		go func(c net.Conn) {
-			// Echo all incoming data.
-			io.Copy(c, c)
-			// Shut down the connection.
-			fmt.Println("Request")
-			c.Close()
-		}(conn)
+		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
+		os.Exit(1)
 	}
 }
