@@ -5,7 +5,8 @@ import (
 )
 
 const (
-	MAXSIZE = 500
+	// NB on est limité à 1350 octets via read/write
+	MAXSIZE = 1000
 )
 
 // Cette fonction découpe un fichier en tableau de buffer

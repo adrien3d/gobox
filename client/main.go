@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/adrien3d/gobox/util"
+	"io/ioutil"
 	"os"
 )
 
@@ -16,17 +17,24 @@ var (
 )
 
 func main() {
-	//var n int
+	// Etablissement de la connexion au serveur
 	var conn util.Conn
 	err := conn.Dial(PORT, ADDR)
 	check(err)
 	defer conn.Close()
 
-	dat, err := util.SplitFile("./test.txt")
+	// Scan du répertoire à synchroniser
+	var listRep util.Fol
+	err = util.ScanDir("../files/", &listRep)
 	check(err)
-	err = conn.Write(dat[0])
+	b, err := listRep.ToBytes()
+	check(err)
+	err = ioutil.WriteFile("./test.json", b, 0644)
+	check(err)
+	err = conn.Write(b)
 	check(err)
 
+	//dat, err := util.SplitFile("./test.txt")
 	fmt.Println("FIN")
 }
 

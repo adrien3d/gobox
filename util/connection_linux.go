@@ -26,6 +26,10 @@ func (c *Conn) Write(b []byte) error {
 	return err
 }
 
+func (c *Conn) Read(b []byte) (n int, err error) {
+	return s.Read(c.sd, b)
+}
+
 func (c *Conn) Close() {
 	s.Close(c.sd)
 }

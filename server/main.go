@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"gobox/server"
+	"github.com/adrien3d/gobox/util"
 	"io/ioutil"
 	"os"
 	s "syscall"
 )
 
 const (
-	PORT = 3000
+	PORT = 1002
 )
 
 func main() {
@@ -35,22 +35,22 @@ func main() {
 		}
 
 		go func(nfd int, sa s.Sockaddr) {
-			fmt.Println(sa)
+			fmt.Println("Nouveau socket :\n\t", sa)
+
 			defer s.Close(nfd)
-			b := make([]byte, 500)
-			var n int
-			for {
-				n, err = s.Read(nfd, b)
-				if n != 0 {
-					break
-				}
-
-			}
-			fmt.Println(n)
-			err := ioutil.WriteFile("./test.txt", b, 0644)
-
-			fmt.Println("Fichier créé")
+			b := make([]byte, 10000)
+			n, err := s.Read(nfd, b)
 			check(err)
+			fmt.Println(n, " octets recu.")
+			err = ioutil.WriteFile("./config.json", b, 0644)
+			check(err)
+			clientListRep, err := util.BytesToFol(b[:n+1])
+			check(err)
+
+			fmt.Println("Arborescence client :")
+			fmt.Println(clientListRep.ToString())
+
+			//err := ioutil.WriteFile("./test.txt", b, 0644)
 
 		}(nfd, sa)
 	}

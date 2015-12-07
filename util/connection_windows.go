@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	s "syscall"
 )
 
@@ -36,8 +35,11 @@ func (c *Conn) Write(b []byte) error {
 	overlapped := s.Overlapped{}
 	croutine := byte(0)
 
-	fmt.Println("PLOP")
 	return s.WSASendto(c.sd, buf, 1, sent, uint32(0), &c.sa, &overlapped, &croutine)
+}
+
+func (c *Conn) Read(b []byte) (n int, err error) {
+	return s.Read(c.sd, b)
 }
 
 func (c *Conn) Close() {
