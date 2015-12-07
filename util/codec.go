@@ -32,12 +32,12 @@ func BytesToFol(b []byte) (myFol Fol, err error) {
 	return
 }
 
-// Convertie la structure Fic sous forme de string
+// Convertit la structure Fic sous forme de string
 func (myFile Fic) ToString() string {
 	return "\n\t" + myFile.Nom + "\t" + strconv.FormatInt(myFile.Lon, 10) + "\t\t" + myFile.Tim.Format("02/01/2006 15:04:05") + "\t\t" + fmt.Sprintf("%x", myFile.Md5hash)
 }
 
-// Convertie la structure fpm sous forme de string
+// Convertit la structure Fol sous forme de string
 func (myFolder Fol) ToString() string {
 	var toPrint string = "\n" + myFolder.Nom + "\t\t" + myFolder.Tim.Format("02/01/2006 15:04:05")
 	for _, fi := range myFolder.Files {
