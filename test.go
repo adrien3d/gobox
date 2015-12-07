@@ -25,12 +25,9 @@ func main() {
 	var listRep util.Fol
 	err := util.ScanDir(dir, &listRep)
 	check(err)
-	//fmt.Println(listRep.ToString())
-	//fmt.Println(listRep)
-	b, err := listRep.ToBytes()
-	//b, err := json.Marshal(listRep)
+	b, err := listRep.ToBytes() //Conversion en JSON : marshallification
 	check(err)
-	err = ioutil.WriteFile("./test.json", b, 0644)
+	err = ioutil.WriteFile("./test.json", b, 0644)//Sauvegarde dans le fichier
 	check(err)
 	fi, err := os.Open("./test.json")
 	defer fi.Close()

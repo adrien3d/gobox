@@ -11,7 +11,8 @@ const (
 )
 
 var (
-	ADDR = [4]byte{10, 8, 0, 1}
+	//ADDR = [4]byte{10, 8, 0, 1}
+	ADDR = [4]byte{5, 39, 89, 231}
 )
 
 func main() {

@@ -23,10 +23,21 @@ func openStat(file string) (fi *os.File, stat os.FileInfo, err error) {
 	return
 }
 
+/*type Fic struct {
+	Nom     string    `json:"fileName"`
+	Lon     int64     `json:"size"`
+	Tim     time.Time `json:"lastFileUpdate"`
+	Md5hash []byte    `json:"md5"`
+}
+
+type Fol struct {
+	SubFol []Fol     `json:"listFolders"`
+	Files  []Fic     `json:"listFiles"`
+	Nom    string    `json:"folderName"`
+	Tim    time.Time `json:"lastFolderUpdate"`
+}*/
 // Renvoie l'arborescence du dossier envoyé en paramètre en type Fol
 func ScanDir(folder string, listeRep *Fol) error {
-	//var listeRep Fol
-
 	// Récupération des infos sur le dossier actuel
 	listeRep.Nom = folder
 	fo, stat, err := openStat(folder)
@@ -54,8 +65,15 @@ func ScanDir(folder string, listeRep *Fol) error {
 			}
 			listeRep.SubFol = append(listeRep.SubFol, fol)
 		} else {
-
 			// On ajoute un Fichier dans le slice des Fichiers
+			fo, stat, err := openStat(folder+curNam)
+			defer fo.Close()
+			if err != nil {
+				return err
+			}
+			if stat.ModTime().After(listeRep.Tim) {
+				listeRep.Tim = stat.ModTime()
+			}
 			curSiz := f.Size()
 			fi, _, err := openStat(folder + f.Name())
 			defer fi.Close()
@@ -70,4 +88,27 @@ func ScanDir(folder string, listeRep *Fol) error {
 		}
 	}
 	return err
+}
+
+/*Comparer la structure des dossiers
+  Éliminer les doublons, en se basant sur le md5
+  Si md5 différent, garder le ficher avec la date la plus récente*/
+func CompareDir(fol1 Fol, fol2 Fol) Fol {
+	var difFol Fol
+	for _, f1 := range fol1 {
+		for _, f2 := range fol2 {
+			if f1.(Fic) && f2.(Fic) {
+				if f1.Nom == f2.Nom {
+					if f1.Md5hash != f2.Md5hash {
+						if f1.Tim.After(f2.Tim) {
+							difFol.Files = append(difFol.Files, f1)
+						} else  {
+							difFol.Files = append(difFol.Files, f2)
+						}
+					}
+				}
+			}
+		}
+	}
+	return difFol
 }
