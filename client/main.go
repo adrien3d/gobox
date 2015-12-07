@@ -4,18 +4,26 @@ import (
 	"fmt"
 	"github.com/adrien3d/gobox/util"
 	"os"
-	s "syscall"
+)
+
+const (
+	PORT = 1002
+)
+
+var (
+	ADDR = [4]byte{10, 8, 0, 1}
 )
 
 func main() {
 	//var n int
-	sd, sa, err := util.Dial()
+	var conn util.Conn
+	err := conn.Dial(PORT, ADDR)
 	check(err)
-	defer s.Close(sd)
+	defer conn.Close()
 
-	dat, err := util.SplitFile("./Tests/test.txt")
+	dat, err := util.SplitFile("./test.txt")
 	check(err)
-	err = util.Write(sd, sa, dat[0])
+	err = conn.Write(dat[0])
 	check(err)
 
 	fmt.Println("FIN")

@@ -23,6 +23,10 @@ type Fol struct {
 	Tim    time.Time `json:"lastFolderUpdate"`
 }
 
+func (myFol Fol) ToJson() ([]byte, error) {
+	return json.MarshalIndent(myFol, "", " ")
+}
+
 func (myFol Fol) ToBytes() ([]byte, error) {
 	return json.Marshal(myFol)
 }

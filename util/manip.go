@@ -4,10 +4,13 @@ import (
 	"io/ioutil"
 )
 
+const (
+	MAXSIZE = 500
+)
+
 // Cette fonction découpe un fichier en tableau de buffer
 // de taille MAXSIZE.
 func SplitFile(path string) (packets [][]byte, err error) {
-
 	dat, err := ioutil.ReadFile(path)
 	if err != nil {
 		return
