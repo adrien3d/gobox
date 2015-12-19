@@ -1,3 +1,4 @@
+// POSIX n'existant pas sous windows, voici l'équivalent avec les librairys WSA.
 package util
 
 import (
@@ -10,7 +11,7 @@ type Conn struct {
 	sa s.SockaddrInet4
 }
 
-// Etablie une connexion via socket à l'aide des librairies WSA (windows).
+// Etablie une connexion via socket à l'aide des librairys WSA (windows).
 func (c *Conn) Dial(port int, addr [4]byte) (err error) {
 	c.sa = s.SockaddrInet4{Port: port, Addr: addr}
 	var d s.WSAData

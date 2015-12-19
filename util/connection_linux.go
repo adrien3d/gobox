@@ -1,3 +1,6 @@
+// Ce package utilise les fonctions POSIX pour communiquer via socket.
+// Il a été recréé dans un but pédagogique, mais c'est "l'équivalent"
+// du package "net", en plus sommaire.
 package util
 
 import (

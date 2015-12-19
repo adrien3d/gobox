@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
 	"github.com/adrien3d/gobox/util"
 	"io/ioutil"
@@ -38,13 +39,35 @@ func main() {
 			fmt.Println("Nouveau socket :\n\t", sa)
 
 			defer s.Close(nfd)
-			b := make([]byte, 10000)
-			n, err := s.Read(nfd, b)
+			size := make([]byte, 8)
+			_, err := s.Read(nfd, size)
 			check(err)
-			fmt.Println(n, " octets recu.")
-			err = ioutil.WriteFile("./config.json", b, 0644)
+			lenght := binary.BigEndian.Uint64(size) // voir le code sur le serveur, retourne la valeur max de int64 (ou presque)
+			file := make([]byte, lenght)
+			f, err := os.Create("./config.json")
 			check(err)
-			clientListRep, err := util.BytesToFol(b[:n+1])
+			defer f.Close()
+			for {
+				fmt.Println(lenght, " octets restants.")
+				if lenght-util.MAXSIZE > 0 {
+					b := make([]byte, util.MAXSIZE)
+					_, err := s.Read(nfd, b)
+					check(err)
+					file = append(file, b...)
+					lenght = lenght - util.MAXSIZE
+				} else {
+					b := make([]byte, lenght)
+					_, err := s.Read(nfd, b)
+					check(err)
+					file = append(file, b...)
+					break
+				}
+
+			}
+
+			err = ioutil.WriteFile("./config.json", file, 0644)
+			check(err)
+			clientListRep, err := util.BytesToFol(file)
 			check(err)
 
 			fmt.Println("Arborescence client :")

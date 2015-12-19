@@ -5,6 +5,7 @@ import (
 	"github.com/adrien3d/gobox/util"
 	"io/ioutil"
 	"os"
+	"sync"
 )
 
 const (
@@ -12,11 +13,14 @@ const (
 )
 
 var (
-	//ADDR = [4]byte{10, 8, 0, 1}
-	ADDR = [4]byte{5, 39, 89, 231}
+	ADDR = [4]byte{10, 8, 0, 1}
+	//ADDR = [4]byte{5, 39, 89, 231}
 )
 
 func main() {
+	// Mutexe de synchronisation
+	var envoi = &sync.Mutex{}
+
 	// Etablissement de la connexion au serveur
 	var conn util.Conn
 	err := conn.Dial(PORT, ADDR)
@@ -31,10 +35,18 @@ func main() {
 	check(err)
 	err = ioutil.WriteFile("./test.json", b, 0644)
 	check(err)
-	err = conn.Write(b)
-	check(err)
+	dat, err := util.SplitFile("./test.json")
 
-	//dat, err := util.SplitFile("./test.txt")
+	// Envoi des packets d'un fichier
+	envoi.Lock()
+	for i, packet := range dat {
+		fmt.Printf("Envoi du packet N°%d.\n", i)
+		fmt.Println(packet)
+		err = conn.Write(packet)
+		check(err)
+		fmt.Println("Envoi réussi !")
+	}
+	envoi.Unlock()
 	fmt.Println("FIN")
 }
 

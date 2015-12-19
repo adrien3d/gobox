@@ -66,7 +66,7 @@ func ScanDir(folder string, listeRep *Fol) error {
 			listeRep.SubFol = append(listeRep.SubFol, fol)
 		} else {
 			// On ajoute un Fichier dans le slice des Fichiers
-			fo, stat, err := openStat(folder+curNam)
+			fo, stat, err := openStat(folder + curNam)
 			defer fo.Close()
 			if err != nil {
 				return err
@@ -92,7 +92,7 @@ func ScanDir(folder string, listeRep *Fol) error {
 
 /*Comparer la structure des dossiers
   Éliminer les doublons, en se basant sur le md5
-  Si md5 différent, garder le ficher avec la date la plus récente*/
+  Si md5 différent, garder le ficher avec la date la plus récente
 func CompareDir(fol1 Fol, fol2 Fol) Fol {
 	var difFol Fol
 	for _, f1 := range fol1 {
@@ -112,3 +112,4 @@ func CompareDir(fol1 Fol, fol2 Fol) Fol {
 	}
 	return difFol
 }
+*/
