@@ -18,8 +18,6 @@ var (
 )
 
 func main() {
-	// Mutexe de synchronisation
-	var envoi = &sync.Mutex{}
 
 	// Etablissement de la connexion au serveur
 	var conn util.Conn
@@ -29,7 +27,7 @@ func main() {
 
 	// Scan du répertoire à synchroniser
 	var listRep util.Fol
-	err = util.ScanDir("../files/", &listRep)
+	err = util.ScanDir("../../", &listRep)
 	check(err)
 	b, err := listRep.ToBytes()
 	check(err)
@@ -38,17 +36,14 @@ func main() {
 	dat, err := util.SplitFile("./test.json")
 
 	// Envoi des packets d'un fichier
-	envoi.Lock()
+
 	for i, packet := range dat {
 		fmt.Printf("Envoi du packet N°%d.\n", i)
-		//fmt.Printf(packet)
-		fmt.Println(len(packet))
-		fmt.Println(packet)
+		fmt.Printf("\t%d octets envoyés ", len(packet))
 		err = conn.Write(packet)
 		check(err)
-		fmt.Println("Envoi réussi !")
+		fmt.Printf("avec succès.")
 	}
-	envoi.Unlock()
 	fmt.Println("FIN")
 }
 

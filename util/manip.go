@@ -3,6 +3,7 @@ package util
 import (
 	"encoding/binary"
 	"io/ioutil"
+	//"string"
 )
 
 const (
@@ -21,19 +22,8 @@ func SplitFile(path string) (packets [][]byte, err error) {
 	}
 	var lenght int = len(dat)
 	packets = append(packets, int64toByte(lenght))
-	i := 1
-	for stop := false; stop == false; {
-		lenght = len(dat)
-		if lenght > MAXSIZE {
-			packets = append(packets, dat[:MAXSIZE])
-			dat = dat[MAXSIZE:]
-			i = i + 1
-
-		} else {
-			packets = append(packets, dat[:lenght])
-			stop = true
-		}
-	}
+	//packets = append(packets, strings.Fields(path))
+	packets = append(packets, dat)
 	return
 }
 
