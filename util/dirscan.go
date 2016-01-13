@@ -90,26 +90,89 @@ func ScanDir(folder string, listeRep *Fol) error {
 	return err
 }
 
-/*Comparer la structure des dossiers
-  Éliminer les doublons, en se basant sur le md5
-  Si md5 différent, garder le ficher avec la date la plus récente
+//  Entrée :
+// - fol1 : dossier à comparer.
+// - fol2 : dossier à mettre à jour.
+//  Renvoie 2 structures Fol :
+// - upName : contient tous les fichiers/dossiers qu'il faut renommer sur dossier 2.
+// - diff : contients tous les fichiers/dossiers qu'il faut importer sur dossier 2.
 func CompareDir(fol1 Fol, fol2 Fol) Fol {
-	var difFol Fol
-	for _, f1 := range fol1 {
-		for _, f2 := range fol2 {
-			if f1.(Fic) && f2.(Fic) {
-				if f1.Nom == f2.Nom {
-					if f1.Md5hash != f2.Md5hash {
-						if f1.Tim.After(f2.Tim) {
-							difFol.Files = append(difFol.Files, f1)
-						} else  {
-							difFol.Files = append(difFol.Files, f2)
+	var diff Fol
+	var upName Fol
+	for {
+		// Si le dossier 1 est vide il n'y a plus de fichier à mettre dans diff
+		if len(fol1.Files) == 0 {
+			break
+		}
+
+		// Si le dossier 2 est vide tous le dossier client va dans diff
+		if len(fol2.Files) == 0 {
+			for {
+				f1, fol1.Files = fol1.Files[len(fol1.Files)-1], fol1.Files[:len(fol1.Files)-1]
+				diff.Files = append(diff.Files, f1)
+				if len(fol1.Files) == 0 {
+					break
+				}
+			}
+			break
+		}
+
+		// on pop 1 élément de chaque dossier
+		f1, fol1.Files = fol1.Files[len(fol1.Files)-1], fol1.Files[:len(fol1.Files)-1]
+		f2, fol2.Files = fol2.Files[len(fol2.Files)-1], fol2.Files[:len(fol2.Files)-1]
+
+		// Si il y a deux contenus différents
+		if f1.Md5hash != f2.Md5hash {
+			// mais de même nom
+			if f1.Nom == f2.Nom {
+				// et que le fichier 1 est plus récent
+				if f1.Tim.After(f2.Tim) {
+					diff.Files = append(diff.Files, f1) // on met à jour le fichier
+				}
+				// Sinon on a déjà la version la plus récente
+			} else {
+				exist := false
+				for _, f2 := range fol2.Files {
+					// Si même contenu
+					if f1.Md5hash == f2.Md5hash {
+						// mais différent nom
+						if f1.Nom != f2.Nom {
+							// et que le fichier 1 est plus récent
+							if f1.Tim.After(f2.Tim) {
+								upName.Files = append(upName.Files, f1) // on met à jour le nom
+							}
 						}
+						exist = true
+						break
 					}
+					// Si même nom
+					if f1.Nom == f2.Nom {
+						// et que le fichier 1 est plus récent
+						if f1.Tim.After(f2.Tim) {
+							diff.Files = append(diff.Files, f1) // on met à jour le fichier
+						}
+						// Sinon on a déjà la version la plus récente
+					}
+				}
+				if !exist {
+					// contenu nouveau et nom nouveau
+					diff.Files = append(diff.Files, f1)
+				}
+			}
+		} else {
+			// Si même contenu et différent nom
+			if f1.Nom != f2.Nom {
+				// et que le fichier 1 est plus récent
+				if f1.Tim.After(f2.Tim) {
+					upName.Files = append(upName.Files, f1) // on met à jour le nom
 				}
 			}
 		}
+
 	}
-	return difFol
+
 }
-*/
+
+func CompareDirRec(fol1 Fol, fol2 Fol, fol3 Fol) {
+
+}

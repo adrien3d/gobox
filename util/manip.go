@@ -8,7 +8,7 @@ import (
 
 const (
 	// NB on est limité à 1350 octets via read/write
-	MAXSIZE = 1000
+	MAXSIZE = 1000 // deprecated
 )
 
 // Cette fonction découpe un fichier en tableau de packet de taille MAXSIZE.

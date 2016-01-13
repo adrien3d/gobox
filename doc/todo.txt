@@ -1,1 +1,22 @@
-1. Sync
+TODO (priorité) :
+
+*** Code ***
+- Finir CompareDir() : L'analyse des fichier est presque finie (à tester en local avec 2 dossiers), puis il faut faire récursivement pour les dossiers.
+
+- Faire le renommage des fichiers/dossiers à partir du dossier "upName" : d'abords côté serveur, puis côté client.
+- Importer les fichiers/dossier à partir du dossier "diff" : d'abords client vers serveur, puis serveur vers client.
+
+*** Compte Rendu ***
+- Ecrire les scenari d'utilisation (dépend de s'il y a une interface graphique ou pas)
+- UML du format protocolaire
+- Ecrire un package test (avec un main) pour tester le package util.
+- Ecrire un manuel d'utilisation propre.
+
+
+
+TODO (pas important) :
+- Une interface graphique client avec :
+	- 1 bouton pour lancer une synchronisation.
+	- 1 champ pour modifier l'IP du serveur.
+	- 1 champ pour modifier le port du serveur.
+	- 1 champ pour modifier le dossier à synchroniser.

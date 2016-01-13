@@ -5,7 +5,6 @@ import (
 	"github.com/adrien3d/gobox/util"
 	"io/ioutil"
 	"os"
-	"sync"
 )
 
 const (
