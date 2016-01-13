@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/binary"
 	"fmt"
 	"github.com/adrien3d/gobox/util"
 	"io/ioutil"
@@ -37,36 +36,58 @@ func main() {
 
 		go func(nfd int, sa s.Sockaddr) {
 			fmt.Println("Nouveau socket :\n\t", sa)
-
 			defer s.Close(nfd)
+
+			// On récupère le nombre d'octets qui va être reçu
 			size := make([]byte, 8)
 			_, err := s.Read(nfd, size)
 			check(err)
-			lenght := binary.BigEndian.Uint64(size) // voir le code sur le serveur, retourne la valeur max de int64 (ou presque)
-			file := make([]byte, lenght)
-			f, err := os.Create("./config.json")
+			var lenght int64 = bigInt(size, 0) // conversion des 8 octets en entier
+
+			// Création du buffer de réception
+			file := make([]byte, 0, lenght+1)
 			check(err)
-			defer f.Close()
+
+			// Réception et assemblage
 			for {
 				fmt.Println(lenght, " octets restants.")
-				if lenght-util.MAXSIZE > 0 {
-					b := make([]byte, util.MAXSIZE)
-					_, err := s.Read(nfd, b)
-					check(err)
-					file = append(file, b...)
-					lenght = lenght - util.MAXSIZE
-				} else {
-					b := make([]byte, lenght)
-					_, err := s.Read(nfd, b)
-					check(err)
-					file = append(file, b...)
+				if lenght == 0 {
 					break
 				}
 
-			}
+				b := make([]byte, util.MAXSIZE)
+				n, err := s.Read(nfd, b)
+				check(err)
+				fmt.Println(n, " reçus.")
+				b = b[:n]
+				file = append(file, b...)
+				fmt.Println(b)
+				lenght = lenght - int64(n)
 
+				/*
+					fmt.Println(lenght, " octets restants.")
+					if lenght > util.MAXSIZE {
+						b := make([]byte, util.MAXSIZE)
+						_, err = s.Read(nfd, b) // Récupération d'un paquet de MAXSIZE octets
+						check(err)
+						fmt.Println(len(b))
+						fmt.Println(b)
+						file = append(file, b...)
+						lenght = lenght - util.MAXSIZE
+					} else {
+						b := make([]byte, lenght)
+						_, err = s.Read(nfd, b) // Récupération des derniers octets
+						check(err)
+						file = append(file, b...)
+						break
+					}*/
+			}
+			// Création du json
+			//file = file[:len(file)-1]
 			err = ioutil.WriteFile("./config.json", file, 0644)
 			check(err)
+
+			// Création de la structure
 			clientListRep, err := util.BytesToFol(file)
 			check(err)
 
@@ -77,6 +98,13 @@ func main() {
 
 		}(nfd, sa)
 	}
+}
+
+func bigInt(size []byte, i int) int64 {
+	if i < 7 {
+		return int64(int32(size[i])<<uint8(56-i*8)) + bigInt(size, i+1)
+	}
+	return int64(size[i])
 }
 
 // Fonction pour checker les erreurs

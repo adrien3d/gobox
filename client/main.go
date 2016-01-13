@@ -13,8 +13,8 @@ const (
 )
 
 var (
-	ADDR = [4]byte{10, 8, 0, 1}
-	//ADDR = [4]byte{5, 39, 89, 231}
+	//ADDR = [4]byte{10, 8, 0, 1}
+	ADDR = [4]byte{5, 39, 89, 231}
 )
 
 func main() {
@@ -41,6 +41,8 @@ func main() {
 	envoi.Lock()
 	for i, packet := range dat {
 		fmt.Printf("Envoi du packet N°%d.\n", i)
+		//fmt.Printf(packet)
+		fmt.Println(len(packet))
 		fmt.Println(packet)
 		err = conn.Write(packet)
 		check(err)

@@ -19,14 +19,18 @@ func SplitFile(path string) (packets [][]byte, err error) {
 	if err != nil {
 		return
 	}
-	packets = append(packets, int64toByte(len(dat)))
+	var lenght int = len(dat)
+	packets = append(packets, int64toByte(lenght))
+	i := 1
 	for stop := false; stop == false; {
-		var lenght int = len(dat)
-		if lenght-MAXSIZE > 0 {
-			packets = append(packets, dat[:MAXSIZE-1])
-			dat = dat[MAXSIZE:lenght]
+		lenght = len(dat)
+		if lenght > MAXSIZE {
+			packets = append(packets, dat[:MAXSIZE])
+			dat = dat[MAXSIZE:]
+			i = i + 1
+
 		} else {
-			packets = append(packets, dat)
+			packets = append(packets, dat[:lenght])
 			stop = true
 		}
 	}
