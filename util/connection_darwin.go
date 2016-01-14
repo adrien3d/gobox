@@ -1,3 +1,6 @@
+// Ce package utilise les fonctions POSIX pour communiquer via socket.
+// Il a été recréé dans un but pédagogique, mais c'est "l'équivalent"
+// du package "net", en plus sommaire.
 package util
 
 import (
@@ -24,6 +27,10 @@ func (c *Conn) Dial(port int, addr [4]byte) (err error) {
 func (c *Conn) Write(b []byte) error {
 	_, err := s.Write(c.sd, b)
 	return err
+}
+
+func (c *Conn) Read(b []byte) (n int, err error) {
+	return s.Read(c.sd, b)
 }
 
 func (c *Conn) Close() {

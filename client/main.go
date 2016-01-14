@@ -8,42 +8,85 @@ import (
 )
 
 const (
-	PORT = 1002
+	PORT   = 1002
+	FOLDER = "./gobox/"
 )
 
 var (
 	//ADDR = [4]byte{10, 8, 0, 1}
+	//ADDR = [4]byte{127, 0, 0, 1}
 	ADDR = [4]byte{5, 39, 89, 231}
 )
 
 func main() {
 
-	// Etablissement de la connexion au serveur
-	var conn util.Conn
-	err := conn.Dial(PORT, ADDR)
-	check(err)
-	defer conn.Close()
-
 	// Scan du répertoire à synchroniser
 	var listRep util.Fol
-	err = util.ScanDir("../../", &listRep)
+	err := util.ScanDir(FOLDER, &listRep)
 	check(err)
 	b, err := listRep.ToBytes()
 	check(err)
-	err = ioutil.WriteFile("./test.json", b, 0644)
+
+	// Etablissement de la connexion au serveur
+	var conn util.Conn
+	err = conn.Dial(PORT, ADDR)
 	check(err)
-	dat, err := util.SplitFile("./test.json")
+	defer conn.Close()
 
-	// Envoi des packets d'un fichier
+	// Attente d'une réponse serveur
+	ack, err := conn.Readbuffer(1)
+	fmt.Println(ack[0])
 
-	for i, packet := range dat {
-		fmt.Printf("Envoi du packet N°%d.\n", i)
-		fmt.Printf("\t%d octets envoyés ", len(packet))
-		err = conn.Write(packet)
-		check(err)
-		fmt.Printf("avec succès.")
+	// Envoi de l'arborescence sous forme de Json
+	fmt.Printf("Envoi de l'arborescence")
+	err = conn.Write(util.Int64toByte(len(b)))
+	check(err)
+	err = conn.Write(b)
+	check(err)
+
+	// Réception du calcul des différences
+	fmt.Printf("Réception du calcul des différences ...")
+
+	// diff1
+	tmp, err := conn.DownloadFile() // téléchargement d'un fichier
+	check(err)
+	diff1, err := util.BytesToFol(tmp) // conversion en structure Fol
+	check(err)
+	toSend := diff1.Parcours() // tableau des fichiers à envoyer
+
+	// diff2
+	tmp2, err := conn.DownloadFile()
+	check(err)
+	diff2, err := util.BytesToFol(tmp2)
+	check(err)
+	toGet := diff2.Parcours()
+
+	// del 1
+	tmp3, err := conn.DownloadFile()
+	check(err)
+	del, err := util.BytesToFol(tmp3)
+	check(err)
+	toDel := del.Parcours()
+
+	// Suppression des fichiers locaux
+	for _, file := range toDel {
+		check(os.Remove(file.Nom))
 	}
-	fmt.Println("FIN")
+
+	// Envoi des fichiers client vers serveur
+	for _, file := range toSend {
+		err = conn.UploadFile(file.Nom)
+		check(err)
+	}
+
+	// Réception des fichiers serveur vers client
+	for _, file := range toGet {
+		newfile, err := conn.DownloadFile()
+		check(err)
+		check(ioutil.WriteFile(file.Nom, newfile, 0644))
+	}
+
+	fmt.Println("Synchronisation effectuée avec succès.")
 }
 
 // Fonction pour checker les erreurs

@@ -39,8 +39,12 @@ func (c *Conn) Write(b []byte) error {
 	return s.WSASendto(c.sd, buf, 1, sent, uint32(0), &c.sa, &overlapped, &croutine)
 }
 
-func (c *Conn) Read(b []byte) (n int, err error) {
-	return s.Read(c.sd, b)
+func (c *Conn) Read(b []byte) (int, error) {
+	dataBuf := s.WSABuf{Len: uint32(4), Buf: &b[0]}
+	flags := uint32(0)
+	qty := uint32(0)
+	err := s.WSARecv(c.sd, &dataBuf, 1, &qty, &flags, nil, nil)
+	return int(qty), err
 }
 
 func (c *Conn) Close() {
