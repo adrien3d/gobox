@@ -1,0 +1,538 @@
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = ;
+	document.CALLGRAPH = ;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "./util"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Ce package utilise les fonctions POSIX pour communiquer via socket.
+Il a été recréé dans un but pédagogique, mais c&#39;est &#34;l&#39;équivalent&#34;
+du package &#34;net&#34;, en plus sommaire.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+				
+				<dd><a href="#BigInt">func BigInt(size []byte, i int) int64</a></dd>
+			
+				
+				<dd><a href="#BytetoInt">func BytetoInt(b []byte) int64</a></dd>
+			
+				
+				<dd><a href="#DeleteFile">func DeleteFile(path string) error</a></dd>
+			
+				
+				<dd><a href="#Int64toByte">func Int64toByte(i int) []byte</a></dd>
+			
+				
+				<dd><a href="#ScanDir">func ScanDir(folder string, listeRep *Fol) error</a></dd>
+			
+				
+				<dd><a href="#SplitFile">func SplitFile(path string) (packets [][]byte, err error)</a></dd>
+			
+				
+				<dd><a href="#WriteFile">func WriteFile(path string, buffer []byte) error</a></dd>
+			
+			
+				
+				<dd><a href="#Conn">type Conn</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SetConn">func SetConn(sd int) Conn</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.Close">func (c *Conn) Close()</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.Dial">func (c *Conn) Dial(port int, addr [4]byte) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.DownloadFile">func (c *Conn) DownloadFile() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.Read">func (c *Conn) Read(b []byte) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.Readbuffer">func (c *Conn) Readbuffer(lenght int64) ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.UploadFile">func (c *Conn) UploadFile(path string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Conn.Write">func (c *Conn) Write(b []byte) error</a></dd>
+				
+			
+				
+				<dd><a href="#Fic">type Fic</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Fic.ToString">func (myFile Fic) ToString() string</a></dd>
+				
+			
+				
+				<dd><a href="#Fol">type Fol</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BytesToFol">func BytesToFol(b []byte) (myFol Fol, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CompareDir">func CompareDir(fol1 Fol, fol2 Fol, lastUp time.Time) (Fol, Fol)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Fol.Parcours">func (myFol Fol) Parcours() []Fic</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Fol.ToBytes">func (myFol Fol) ToBytes() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Fol.ToJson">func (myFol Fol) ToJson() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Fol.ToString">func (myFolder Fol) ToString() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/target/codec.go">codec.go</a>
+			
+				<a href="/src/target/connection_linux.go">connection_linux.go</a>
+			
+				<a href="/src/target/dirscan.go">dirscan.go</a>
+			
+				<a href="/src/target/manip.go">manip.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+    <span id="MAXPACKETSIZE">MAXPACKETSIZE</span> = 1000
+)</pre>
+				
+			
+		
+		
+		
+			
+			
+			<h2 id="BigInt">func <a href="/src/target/manip.go?s=2946:2983#L122">BigInt</a></h2>
+			<pre>func BigInt(size []<a href="/pkg/builtin/#byte">byte</a>, i <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#int64">int64</a></pre>
+			
+			
+			
+
+		
+			
+			
+			<h2 id="BytetoInt">func <a href="/src/target/manip.go?s=2874:2904#L117">BytetoInt</a></h2>
+			<pre>func BytetoInt(b []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#int64">int64</a></pre>
+			<p>
+Renvoie l&#39;int16 du tableau de byte.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="DeleteFile">func <a href="/src/target/manip.go?s=2582:2616#L104">DeleteFile</a></h2>
+			<pre>func DeleteFile(path <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+Supprime un fichier
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Int64toByte">func <a href="/src/target/manip.go?s=2725:2755#L110">Int64toByte</a></h2>
+			<pre>func Int64toByte(i <a href="/pkg/builtin/#int">int</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Renvoie le tableau de byte de l&#39;int64.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="ScanDir">func <a href="/src/target/dirscan.go?s=836:884#L35">ScanDir</a></h2>
+			<pre>func ScanDir(folder <a href="/pkg/builtin/#string">string</a>, listeRep *<a href="#Fol">Fol</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+Renvoie l&#39;arborescence du dossier envoyé en paramètre en type Fol
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SplitFile">func <a href="/src/target/manip.go?s=1961:2018#L79">SplitFile</a></h2>
+			<pre>func SplitFile(path <a href="/pkg/builtin/#string">string</a>) (packets [][]<a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+Cette fonction découpe un fichier en tableau de packet de taille MAXSIZE.
+Le dernier packet est de taille &lt; MAXSIZE.
+</p>
+<p>
+NB : le premier packet contient la taille du fichier (8 octets pour int64).
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="WriteFile">func <a href="/src/target/manip.go?s=2369:2417#L93">WriteFile</a></h2>
+			<pre>func WriteFile(path <a href="/pkg/builtin/#string">string</a>, buffer []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+Fonction pour créer un fichier en créant les sous répertoires si besoin
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Conn">type <a href="/src/target/connection_linux.go?s=251:299#L1">Conn</a></h2>
+			<pre>type Conn struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Structure d&#39;un dossier
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="SetConn">func <a href="/src/target/connection_linux.go?s=595:620#L17">SetConn</a></h3>
+				<pre>func SetConn(sd <a href="/pkg/builtin/#int">int</a>) <a href="#Conn">Conn</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="Conn.Close">func (*Conn) <a href="/src/target/connection_linux.go?s=864:886#L30">Close</a></h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) Close()</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Conn.Dial">func (*Conn) <a href="/src/target/connection_linux.go?s=374:429#L7">Dial</a></h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) Dial(port <a href="/pkg/builtin/#int">int</a>, addr [4]<a href="/pkg/builtin/#byte">byte</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Etablie une connexion via socket à l&#39;aide des librairies POSIX (BSD)
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Conn.DownloadFile">func (*Conn) <a href="/src/target/manip.go?s=890:935#L35">DownloadFile</a></h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) DownloadFile() ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Récupère un fichier :
+- D&#39;abord récupère sa taille.
+- Puis récupère le fichier.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Conn.Read">func (*Conn) <a href="/src/target/connection_linux.go?s=786:834#L26">Read</a></h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) Read(b []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Conn.Readbuffer">func (*Conn) <a href="/src/target/manip.go?s=238:293#L6">Readbuffer</a></h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) Readbuffer(lenght <a href="/pkg/builtin/#int64">int64</a>) ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Lit le socket jusqu&#39;à avoir un buffer de taille lenght
+Permet juste d&#39;avoir une transaction de donnée plus stable !
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Conn.UploadFile">func (*Conn) <a href="/src/target/manip.go?s=1455:1499#L56">UploadFile</a></h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) UploadFile(path <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Envoi un fichier :
+- D&#39;abord envoi sa taille.
+- Puis envoi le fichier.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Conn.Write">func (*Conn) <a href="/src/target/connection_linux.go?s=704:740#L21">Write</a></h3>
+				<pre>func (c *<a href="#Conn">Conn</a>) Write(b []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Fic">type <a href="/src/target/codec.go?s=95:259#L1">Fic</a></h2>
+			<pre>type Fic struct {
+    Nom     <a href="/pkg/builtin/#string">string</a>    `json:&#34;fileName&#34;`
+    Lon     <a href="/pkg/builtin/#int64">int64</a>     `json:&#34;size&#34;`
+    Tim     <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a> `json:&#34;lastFileUpdate&#34;`
+    Md5hash []<a href="/pkg/builtin/#byte">byte</a>    `json:&#34;md5&#34;`
+}</pre>
+			<p>
+Structure d&#39;un Fichier
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Fic.ToString">func (Fic) <a href="/src/target/codec.go?s=778:813#L30">ToString</a></h3>
+				<pre>func (myFile <a href="#Fic">Fic</a>) ToString() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+Convertit la structure Fic sous forme de string
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Fol">type <a href="/src/target/codec.go?s=287:464#L9">Fol</a></h2>
+			<pre>type Fol struct {
+    SubFol []<a href="#Fol">Fol</a>     `json:&#34;listFolders&#34;`
+    Files  []<a href="#Fic">Fic</a>     `json:&#34;listFiles&#34;`
+    Nom    <a href="/pkg/builtin/#string">string</a>    `json:&#34;folderName&#34;`
+    Tim    <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a> `json:&#34;lastFolderUpdate&#34;`
+}</pre>
+			<p>
+Structure d&#39;un dossier
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="BytesToFol">func <a href="/src/target/codec.go?s=632:680#L24">BytesToFol</a></h3>
+				<pre>func BytesToFol(b []<a href="/pkg/builtin/#byte">byte</a>) (myFol <a href="#Fol">Fol</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="CompareDir">func <a href="/src/target/dirscan.go?s=2339:2403#L94">CompareDir</a></h3>
+				<pre>func CompareDir(fol1 <a href="#Fol">Fol</a>, fol2 <a href="#Fol">Fol</a>, lastUp <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a>) (<a href="#Fol">Fol</a>, <a href="#Fol">Fol</a>)</pre>
+				<pre>Entrée :
+</pre>
+<p>
+- fol1 : dossier à comparer.
+- fol2 : dossier à mettre à jour.
+</p>
+<pre>Renvoie 2 structures Fol :
+</pre>
+<p>
+- diff : contients tous les fichiers/dossiers qu&#39;il faut importer sur dossier 2.
+- toDelete : contient tous les fichiers/dossiers qu&#39;il faut supprimer sur dossier 1.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Fol.Parcours">func (Fol) <a href="/src/target/codec.go?s=1328:1361#L46">Parcours</a></h3>
+				<pre>func (myFol <a href="#Fol">Fol</a>) Parcours() []<a href="#Fic">Fic</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Fol.ToBytes">func (Fol) <a href="/src/target/codec.go?s=556:598#L20">ToBytes</a></h3>
+				<pre>func (myFol <a href="#Fol">Fol</a>) ToBytes() ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Fol.ToJson">func (Fol) <a href="/src/target/codec.go?s=466:507#L16">ToJson</a></h3>
+				<pre>func (myFol <a href="#Fol">Fol</a>) ToJson() ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Fol.ToString">func (Fol) <a href="/src/target/codec.go?s=1038:1075#L35">ToString</a></h3>
+				<pre>func (myFolder <a href="#Fol">Fol</a>) ToString() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+Convertit la structure Fol sous forme de string
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+

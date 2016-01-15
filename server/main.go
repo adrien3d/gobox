@@ -24,6 +24,8 @@ var (
 )
 
 func main() {
+	check(os.MkdirAll(FOLDER, 0777))
+
 	// Initialisation des variables serveur
 	lastUpdate = time.Date(1994, time.April, 2, 2, 0, 0, 0, time.UTC)
 	dat, err := ioutil.ReadFile(LASTUPFOLDER)
@@ -102,7 +104,7 @@ func app(nfd int, sa s.Sockaddr) {
 	fmt.Println("\n*** Fichiers à supprimer sur le client ***")
 	fmt.Println(del1)
 
-	toDel := del2.Parcours()
+	//toDel := del2.Parcours()
 
 	// Envoi de la structure diff2
 	buff1, err := diff2.ToBytes()
@@ -146,10 +148,10 @@ func app(nfd int, sa s.Sockaddr) {
 	fmt.Println("Del1 envoyé")
 
 	// Suppression des fichiers del2
-	for _, file := range toDel {
+	/*for _, file := range toDel {
 		fmt.Println("Suppression de ", file.Nom)
-		check(os.Remove(file.Nom))
-	}
+		check(util.DeleteFile(file.Nom))
+	}*/
 
 	// Réception des fichiers diff2
 	for _, file := range toGet {

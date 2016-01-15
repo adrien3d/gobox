@@ -13,17 +13,13 @@ const (
 
 var (
 	//ADDR = [4]byte{10, 8, 0, 1}
-	//ADDR = [4]byte{127, 0, 0, 1}
-	ADDR = [4]byte{5, 39, 89, 231}
+	ADDR = [4]byte{127, 0, 0, 1}
+	//ADDR = [4]byte{5, 39, 89, 231}
 )
 
 func main() {
 	fmt.Printf("Demarrage client")
-
-	/*var dir string
-	if len(os.Args) > 1 {
-		dir = os.Args[1]
-	}*/
+	check(os.MkdirAll(FOLDER, 0777))
 
 	// Scan du répertoire à synchroniser
 	var listRep util.Fol
@@ -85,10 +81,10 @@ func main() {
 	fmt.Println(toDel)
 
 	// Suppression des fichiers locaux
-	for _, file := range toDel {
+	/*for _, file := range toDel {
 		fmt.Println("Suppression de ", file.Nom)
-		check(DeleteFile(file.Nom))
-	}
+		check(util.DeleteFile(file.Nom))
+	}*/
 
 	// Envoi des fichiers client vers serveur
 	for _, file := range toSend {

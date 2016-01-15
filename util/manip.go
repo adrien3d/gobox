@@ -113,8 +113,7 @@ func WriteFile(path string, buffer []byte) error {
 // Supprime un fichier
 func DeleteFile(path string) error {
 	absPath, _ := filepath.Abs(path)
-	os.Remove(absPath)
-	return err
+	return os.Remove(absPath)
 }
 
 // Renvoie le tableau de byte de l'int64.
