@@ -99,6 +99,7 @@ func SplitFile(path string) (packets [][]byte, err error) {
 	return
 }
 
+// Fonction pour créer un fichier en créant les sous répertoires si besoin
 func WriteFile(path string, buffer []byte) error {
 
 	err := os.MkdirAll(folderOfFile(path), 0777)
@@ -106,6 +107,13 @@ func WriteFile(path string, buffer []byte) error {
 		return err
 	}
 	err = ioutil.WriteFile(path, buffer, 0644)
+	return err
+}
+
+// Supprime un fichier
+func DeleteFile(path string) error {
+	absPath, _ := filepath.Abs(path)
+	os.Remove(absPath)
 	return err
 }
 

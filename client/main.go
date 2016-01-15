@@ -87,7 +87,7 @@ func main() {
 	// Suppression des fichiers locaux
 	for _, file := range toDel {
 		fmt.Println("Suppression de ", file.Nom)
-		check(os.Remove(file.Nom))
+		check(DeleteFile(file.Nom))
 	}
 
 	// Envoi des fichiers client vers serveur
