@@ -147,31 +147,31 @@ func app(nfd int, sa s.Sockaddr) {
 
 	// Suppression des fichiers del2
 	for _, file := range toDel {
+		fmt.Println("Suppression de ", file.Nom)
 		check(os.Remove(file.Nom))
-
-		fmt.Println("un fichier supprimé")
 	}
 
 	// Réception des fichiers diff2
 	for _, file := range toGet {
+		fmt.Println("Reception de ", file.Nom)
 		newfile, err := conn.DownloadFile()
 		check(err)
-		fmt.Println("un fichier reçu")
 		check(util.WriteFile(file.Nom, newfile))
-		fmt.Println("Un fichier écris")
 	}
 
 	// Envoie des fichiers diff1
 	for _, file := range toSend {
+		fmt.Println("Envoi de ", file.Nom)
 		err = conn.UploadFile(file.Nom)
 		check(err)
-
-		fmt.Println("Un fichier envoyé")
 	}
+
+	// mise à jour de l'heure de dernière synchronisation
 	lastUpdate = time.Now()
 	currentTime, err := json.Marshal(lastUpdate)
 	check(err)
-	err = ioutil.WriteFile(LASTUPFOLDER, currentTime, 0644)
-	check(err)
+	check(util.WriteFile(LASTUPFOLDER, currentTime))
+
+	fmt.Println("Synchronisation effectuée avec succès !")
 
 }

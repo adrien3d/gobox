@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	MAXPACKETSIZE = 1
+	MAXPACKETSIZE = 1000
 )
 
 // Lit le socket jusqu'à avoir un buffer de taille lenght

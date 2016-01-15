@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/adrien3d/gobox/util"
-	"io/ioutil"
 	"os"
 )
 
@@ -97,7 +96,7 @@ func main() {
 		fmt.Println("Reception de ", file.Nom)
 		newfile, err := conn.DownloadFile()
 		check(err)
-		check(ioutil.WriteFile(file.Nom, newfile, 0644))
+		check(util.WriteFile(file.Nom, newfile))
 	}
 
 	fmt.Println("Synchronisation effectuée avec succès.")
