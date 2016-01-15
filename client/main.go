@@ -45,7 +45,7 @@ func main() {
 	check(err)
 
 	// Réception du calcul des différences
-	fmt.Printf("Réception du calcul des différences ...")
+	fmt.Printf("Réception du calcul des différences...")
 
 	// diff1
 	tmp, err := conn.DownloadFile() // téléchargement d'un fichier

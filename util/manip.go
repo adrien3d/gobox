@@ -25,7 +25,6 @@ func (c *Conn) Readbuffer(lenght int64) ([]byte, error) {
 		if lenght == 0 {
 			return file, nil
 		}
-
 		b := make([]byte, maxsizepacket)
 		n, err := c.Read(b)
 		if err != nil {

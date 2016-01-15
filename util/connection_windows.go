@@ -40,9 +40,10 @@ func (c *Conn) Write(b []byte) error {
 }
 
 func (c *Conn) Read(b []byte) (int, error) {
-	dataBuf := s.WSABuf{Len: uint32(4), Buf: &b[0]}
+	dataBuf := s.WSABuf{Len: uint32(len(b)), Buf: &b[0]}
 	flags := uint32(0)
 	qty := uint32(0)
+	//fmt.Println(c.sd, &dataBuf, 1, &qty, &flags)
 	err := s.WSARecv(c.sd, &dataBuf, 1, &qty, &flags, nil, nil)
 	return int(qty), err
 }

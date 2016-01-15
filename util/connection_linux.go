@@ -4,7 +4,6 @@
 package util
 
 import (
-	"fmt"
 	s "syscall"
 )
 
@@ -23,6 +22,10 @@ func (c *Conn) Dial(port int, addr [4]byte) (err error) {
 	}
 	s.Connect(c.sd, &c.sa)
 	return
+}
+
+func SetConn(sd int) Conn {
+	return Conn{sd: sd, sa: s.SockaddrInet4{Port: 0, Addr: [4]byte{0, 0, 0, 0}}}
 }
 
 func (c *Conn) Write(b []byte) error {

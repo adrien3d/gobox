@@ -65,7 +65,9 @@ func main() {
 
 func app(nfd int, sa s.Sockaddr) {
 	defer s.Close(nfd)
-	conn := util.Conn{nfd, sa}
+	//inet4 := sa.sockaddr().
+	//s.SockaddrInet4{Port: sa.Port, Addr: sa.Addr}
+	conn := util.SetConn(nfd)
 
 	// Envoie de l'acknowledge pour lancer la synchro
 	for {
@@ -104,6 +106,10 @@ func app(nfd int, sa s.Sockaddr) {
 	// Envoi de la structure diff2
 	buff1, err := diff2.ToBytes()
 	check(err)
+	fmt.Println("plop1")
+	err = conn.Write(util.Int64toByte(len(buff1)))
+	check(err)
+	fmt.Println("plop2")
 	err = conn.Write(buff1)
 	check(err)
 	toGet := diff2.Parcours()
@@ -111,12 +117,16 @@ func app(nfd int, sa s.Sockaddr) {
 	// Envoi de la structure diff1
 	buff2, err := diff1.ToBytes()
 	check(err)
+	err = conn.Write(util.Int64toByte(len(buff2)))
+	check(err)
 	err = conn.Write(buff2)
 	check(err)
 	toSend := diff1.Parcours()
 
 	// Envoi de la structure del1
 	buff3, err := del1.ToBytes()
+	check(err)
+	err = conn.Write(util.Int64toByte(len(buff3)))
 	check(err)
 	err = conn.Write(buff3)
 	check(err)
@@ -138,8 +148,8 @@ func app(nfd int, sa s.Sockaddr) {
 		err = conn.UploadFile(file.Nom)
 		check(err)
 	}
-
-	currentTime, err = json.Marshal(time.Now())
+	lastUpdate = time.Now()
+	currentTime, err := json.Marshal(lastUpdate)
 	check(err)
 	err = ioutil.WriteFile(LASTUPFOLDER, currentTime, 0644)
 	check(err)
