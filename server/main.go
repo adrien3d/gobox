@@ -67,6 +67,7 @@ func app(nfd int, sa s.Sockaddr) {
 	defer s.Close(nfd)
 	//inet4 := sa.sockaddr().
 	//s.SockaddrInet4{Port: sa.Port, Addr: sa.Addr}
+	fmt.Printf("%v", sa)
 	conn := util.SetConn(nfd)
 
 	// Envoie de l'acknowledge pour lancer la synchro
@@ -106,47 +107,66 @@ func app(nfd int, sa s.Sockaddr) {
 	// Envoi de la structure diff2
 	buff1, err := diff2.ToBytes()
 	check(err)
-	fmt.Println("plop1")
 	err = conn.Write(util.Int64toByte(len(buff1)))
 	check(err)
-	fmt.Println("plop2")
+	_, err = conn.Readbuffer(1) // acknowledgment
+	check(err)
 	err = conn.Write(buff1)
 	check(err)
+	_, err = conn.Readbuffer(1) // acknowledgment
+	check(err)
 	toGet := diff2.Parcours()
+	fmt.Println("Diff2 envoyé")
 
 	// Envoi de la structure diff1
 	buff2, err := diff1.ToBytes()
 	check(err)
 	err = conn.Write(util.Int64toByte(len(buff2)))
 	check(err)
+	_, err = conn.Readbuffer(1) // acknowledgment
+	check(err)
 	err = conn.Write(buff2)
 	check(err)
+	_, err = conn.Readbuffer(1) // acknowledgment
+	check(err)
 	toSend := diff1.Parcours()
+	fmt.Println("Diff1 envoyé")
 
 	// Envoi de la structure del1
 	buff3, err := del1.ToBytes()
 	check(err)
 	err = conn.Write(util.Int64toByte(len(buff3)))
 	check(err)
+	_, err = conn.Readbuffer(1) // acknowledgment
+	check(err)
 	err = conn.Write(buff3)
 	check(err)
+	_, err = conn.Readbuffer(1) // acknowledgment
+	check(err)
+	fmt.Println("Del1 envoyé")
 
 	// Suppression des fichiers del2
 	for _, file := range toDel {
 		check(os.Remove(file.Nom))
+
+		fmt.Println("un fichier supprimé")
 	}
 
 	// Réception des fichiers diff2
 	for _, file := range toGet {
 		newfile, err := conn.DownloadFile()
 		check(err)
-		check(ioutil.WriteFile(file.Nom, newfile, 0644))
+		fmt.Println("un fichier reçu")
+		check(util.WriteFile(file.Nom, newfile))
+		fmt.Println("Un fichier écris")
 	}
 
 	// Envoie des fichiers diff1
 	for _, file := range toSend {
 		err = conn.UploadFile(file.Nom)
 		check(err)
+
+		fmt.Println("Un fichier envoyé")
 	}
 	lastUpdate = time.Now()
 	currentTime, err := json.Marshal(lastUpdate)

@@ -54,6 +54,10 @@ func (myFolder Fol) ToString() string {
 }
 
 func (myFol Fol) Parcours() []Fic {
+
+	for i := range myFol.Files {
+		myFol.Files[i].Nom = myFol.Nom + myFol.Files[i].Nom
+	}
 	lesFics := myFol.Files
 	for _, subfol := range myFol.SubFol {
 		lesFics = append(lesFics, subfol.Parcours()...)

@@ -177,3 +177,8 @@ func lastFolder(path string) string {
 	folders := strings.Split(path, "/")
 	return folders[len(folders)-2]
 }
+
+func folderOfFile(path string) string {
+	folders := strings.Split(path, "/")
+	return strings.Join(folders[:len(folders)-1], "/")
+}

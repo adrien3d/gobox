@@ -13,9 +13,9 @@ const (
 )
 
 var (
-	//ADDR = [4]byte{10, 8, 0, 1}
+	ADDR = [4]byte{10, 8, 0, 1}
 	//ADDR = [4]byte{127, 0, 0, 1}
-	ADDR = [4]byte{5, 39, 89, 231}
+	//ADDR = [4]byte{5, 39, 89, 231}
 )
 
 func main() {
@@ -34,11 +34,16 @@ func main() {
 	defer conn.Close()
 
 	// Attente d'une réponse serveur
-	ack, err := conn.Readbuffer(1)
-	fmt.Println(ack[0])
+	for {
+		ack, err := conn.Readbuffer(1)
+		check(err)
+		if len(ack) == 1 && ack[0] == 42 {
+			break
+		}
+	}
 
 	// Envoi de l'arborescence sous forme de Json
-	fmt.Printf("Envoi de l'arborescence")
+	fmt.Printf("\nEnvoi de l'arborescence\n\n")
 	err = conn.Write(util.Int64toByte(len(b)))
 	check(err)
 	err = conn.Write(b)
@@ -54,12 +59,16 @@ func main() {
 	check(err)
 	toSend := diff1.Parcours() // tableau des fichiers à envoyer
 
+	fmt.Println(toSend)
+
 	// diff2
 	tmp2, err := conn.DownloadFile()
 	check(err)
 	diff2, err := util.BytesToFol(tmp2)
 	check(err)
 	toGet := diff2.Parcours()
+
+	fmt.Println(toGet)
 
 	// del 1
 	tmp3, err := conn.DownloadFile()
@@ -68,19 +77,24 @@ func main() {
 	check(err)
 	toDel := del.Parcours()
 
+	fmt.Println(toDel)
+
 	// Suppression des fichiers locaux
 	for _, file := range toDel {
+		fmt.Println("Suppression de ", file.Nom)
 		check(os.Remove(file.Nom))
 	}
 
 	// Envoi des fichiers client vers serveur
 	for _, file := range toSend {
+		fmt.Println("Envoi de ", file.Nom)
 		err = conn.UploadFile(file.Nom)
 		check(err)
 	}
 
 	// Réception des fichiers serveur vers client
 	for _, file := range toGet {
+		fmt.Println("Reception de ", file.Nom)
 		newfile, err := conn.DownloadFile()
 		check(err)
 		check(ioutil.WriteFile(file.Nom, newfile, 0644))

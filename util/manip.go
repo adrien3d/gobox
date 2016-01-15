@@ -3,10 +3,12 @@ package util
 import (
 	"encoding/binary"
 	"io/ioutil"
+	"os"
+	"path/filepath"
 )
 
 const (
-	MAXPACKETSIZE = 1000
+	MAXPACKETSIZE = 1
 )
 
 // Lit le socket jusqu'à avoir un buffer de taille lenght
@@ -45,8 +47,16 @@ func (c *Conn) DownloadFile() ([]byte, error) {
 	if err != nil {
 		return size, err
 	}
-	n := BigInt(size, 0)        // Conversion des 8 octets en entier
+	n := BigInt(size, 0)      // Conversion des 8 octets en entier
+	err = c.Write([]byte{42}) // acknowledgment
+	if err != nil {
+		return size, err
+	}
 	tmp, err := c.Readbuffer(n) // Réception des n octets du fichier
+	if err != nil {
+		return tmp, err
+	}
+	err = c.Write([]byte{42}) // acknowledgment
 	return tmp, err
 }
 
@@ -58,8 +68,13 @@ func (c *Conn) UploadFile(path string) error {
 	if err != nil {
 		return err
 	}
+
 	for _, packet := range dat {
 		err = c.Write(packet)
+		if err != nil {
+			return err
+		}
+		_, err := c.Readbuffer(1) // acknowledgment
 		if err != nil {
 			return err
 		}
@@ -72,7 +87,8 @@ func (c *Conn) UploadFile(path string) error {
 //
 // NB : le premier packet contient la taille du fichier (8 octets pour int64).
 func SplitFile(path string) (packets [][]byte, err error) {
-	dat, err := ioutil.ReadFile(path)
+	absPath, _ := filepath.Abs(path)
+	dat, err := ioutil.ReadFile(absPath)
 	if err != nil {
 		return
 	}
@@ -81,6 +97,16 @@ func SplitFile(path string) (packets [][]byte, err error) {
 	//packets = append(packets, strings.Fields(path))
 	packets = append(packets, dat)
 	return
+}
+
+func WriteFile(path string, buffer []byte) error {
+
+	err := os.MkdirAll(folderOfFile(path), 0777)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(path, buffer, 0644)
+	return err
 }
 
 // Renvoie le tableau de byte de l'int64.
